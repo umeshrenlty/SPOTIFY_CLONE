@@ -1,0 +1,17 @@
+[
+    {
+        "name":"umesh sahoo",
+        "age":"22",
+        "city":"goa"
+    },
+    {
+        "name":"sonu nigam",
+        "age":"24",
+        "city":"agra"
+    },
+    {
+        "name":"udit nigam",
+        "age":"24",
+        "city":"kolkata"
+    }
+]

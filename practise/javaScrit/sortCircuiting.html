@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sortCircuiting</title>
+</head>
+
+<body>
+    <h1>sort circuiting and nullish coalacing operator</h1>
+    <script>
+        //   const returnMeTheNumber=(number)=>
+        //   {
+
+        //     return (number || -1)
+        //   }  
+        //   console.log(returnMeTheNumber(null));
+        //   console.log(returnMeTheNumber(NaN));
+        //   console.log(returnMeTheNumber(''));
+        //   console.log(returnMeTheNumber(0)); 
+        //   const returnMeTheNumber=(number)=>
+        //   {
+
+        //     return (number ?? -1)
+        //   }  
+        //   console.log(returnMeTheNumber(null));
+        //   console.log(returnMeTheNumber(undefined));
+        //   console.log(returnMeTheNumber(NaN));
+        //   console.log(returnMeTheNumber(''));
+        //   console.log(returnMeTheNumber(0));
+        //   console.log(null ?? undefined ?? 0 ?? ''?? 75 ?? NaN);
+        //   console.log(null || undefined || 0 || ''|| 75);
+        // let users={
+        //     student:{
+        //         name:4,
+        //         age:25
+        //     }
+
+        // }
+        // console.warn(users.student.name ?? 'unknown');
+        // console.warn(users.student.age || 'unknown');
+        function A() { console.log('A was called'); return undefined; }
+        function B() { console.log('B was called'); return null; }
+        function C() { console.log('C was called'); return "foo"; }
+
+        console.log(A() ?? C());
+        // logs "A was called" then "C was called" and then "foo"
+        // as A() returned undefined so both expressions are evaluated
+
+        console.log(B() ?? C());
+// logs "B was called" then "false"
+// as B() returned false (and not null or undefined), the right
+// hand side expression was not evaluated
+
+    </script>
+</body>
+
+</html>

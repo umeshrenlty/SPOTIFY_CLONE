@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intersection Observer</title>
+    <style>
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+            position: absolute;
+            text-align: center;
+       
+          
+            left: 50%;
+        }
+
+        .card {
+            background: rgb(255, 255, 255);
+            border: 1px solid black;
+            border-radius: .25rem;
+            padding: .5rem;
+            transform: translate(100px);
+            opacity: 0;
+            transition: 150ms;
+        }
+
+        .card.show {
+            transform: translate(0);
+            opacity: 1;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="card-container">
+        <div class="card  ">this is my first card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+        <div class="card">this is a card</div>
+
+    </div>
+    <script>
+        const cards = document.querySelectorAll(".card")
+        const Observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                entry.target.classList.toggle("show", entry.isIntersecting)
+                // if(entry.isIntersecting)
+                // Observer.unobserve(entry.target)
+            })
+
+        }, {
+            threshold: 1,
+            // rootMargin:"-100px"
+
+        })
+        const lastCardObserver = new IntersectionObserver(entries => {
+            const lastCard = entries[0];
+            if (!lastCard.isIntersecting)
+                return loadNewCards()
+            lastCardObserver.unobserve(lastCard.target)
+            lastCardObserver.observe(document.querySelector(".card:last-child"))
+
+
+
+        }, {})
+        const cardContainer = document.querySelector(".card-container")
+        lastCardObserver.observe(document.querySelector(".card:last-child"))
+
+  //toggle ka use tab krenge jab one click me kuch add krna ho
+  //and dubra click krne par gayab ho jaye
+
+
+        cards.forEach(card => {
+            Observer.observe(card)
+        })
+        function loadNewCards() {
+            for (let i = 0; i < 10; i++) {
+                const card = document.createElement("div")
+                card.textContent = "New card"
+                card.classList.add("card")
+                Observer.observe(card)
+                cardContainer.append(card);
+            }
+        }
+    </script>
+</body>
+
+</html>

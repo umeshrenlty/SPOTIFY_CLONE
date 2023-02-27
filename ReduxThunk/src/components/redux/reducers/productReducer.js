@@ -3,6 +3,7 @@ const initialState = {
   products: [],
 };
 export const productReducer = (state = initialState, {type, payload}) => {
+  console.log(type);
   switch (type) {
     case ActionTypes.SET_PRODUCTS:
       return {...state, products: payload};

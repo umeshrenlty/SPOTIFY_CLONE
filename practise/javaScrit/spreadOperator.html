@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spread Operator</title>
+</head>
+<body>
+    <script>
+        // var arr1=[10,20,30,40];
+        // var arr2=[50,60];
+        // var arr3=arr1.concat(arr2)
+        // console.log(arr1);
+        // console.log(arr2);
+        // console.log(arr3);
+        // var arr3=[5,...arr2,6,...arr1,7]; //spread operator concatention
+        // console.log(arr3);
+        var obj1={
+            name:"yahoo baba",
+            course:"btech"
+
+        };
+        var obj2={
+            age:25    
+           }
+           console.log(obj1);
+           console.log(obj2);
+
+          var obj3={...obj1,...obj2};      
+          console.log(obj3); 
+          console.log([obj1])
+        var arr=[10,20,30,40];
+        var arr2=[...arr];
+        //spread operator 
+        // arr.push(50);
+        // console.log(arr2);
+        // console.log(arr);
+        console.log(arr);
+        console.log({...arr}); 
+        //   function sum(name,...args)
+        //   {
+        //     console.log(arguments);
+        //     document.write(`hello ${name}:`);
+        //     let sum=0;
+        //     for(let i in args)
+        //     {
+        //         sum+=args[i];
+        //     }
+        //     document.write(sum);
+        //   }
+        //   var arr=[10,20,30];
+          //sirf arr pass krne se total 2 argument pas honge
+        //   sum("yahoo baba",arr);
+        //ab 4 pass hogA ... LAGNE SE
+        // sum("yahoo baba",...arr);
+    </script>
+</body>
+</html>

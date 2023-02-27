@@ -27,7 +27,7 @@ const ProductListing = () => {
 
   useEffect(() => {
     dispatch(fetchProducts());
-  },[]);
+  }, []);
   return (
     <View>
       <ProdcutComponet />

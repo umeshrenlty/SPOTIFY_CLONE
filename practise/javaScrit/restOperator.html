@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spread Operator</title>
+</head>
+<body>
+    <h1></h1>
+    <script>  
+   
+        function sum(name,...pagla)
+        {
+            console.log(pagla);
+            document.write(`hello ji ${name} :`);
+            let sum=""; 
+            for(let i in pagla)
+            sum+=pagla[i];
+            document.write(sum+"<br>");
+        }
+        sum("yahoo baba","1","2","3");
+        //...args=>rest operator
+        
+    </script>
+</body>
+</html>
