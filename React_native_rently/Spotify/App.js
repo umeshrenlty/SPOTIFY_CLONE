@@ -1,30 +1,41 @@
 import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 import {NavigationContainer} from '@react-navigation/native';
-
+import {requestRefreshedAccessToken, setRefreshToken} from './Redux/action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  CardStyleInterpolators,
-  createStackNavigator,
-} from '@react-navigation/stack';
-
-import {LoadingSpinner} from './components/LoadSpinner';
+import {createStackNavigator} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
 import Authorize from './screens/Authorize';
 import TrackPlayer from './screens/TrackPlayer';
 import HomeTabs from './Navigation/HomeTab';
 
-// import {
-//   setTokens,
-//   requestRefreshedAccessTokenAsync,
-// } from './store/slices/authSlice';
-
 const Stack = createStackNavigator();
-
 const App = () => {
-  // if (auth.tokenIsLoading) return <LoadingSpinner />;
-  const auth = false;
+  const auth = useSelector(state => state.TokenReducer);
+  console.log(auth, 'auth');
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const tryLogin = async () => {
+      const authData = await AsyncStorage.getItem('authData');
+      if (!authData) {
+        return;
+      }
+      const {accessToken, refreshToken, accessTokenExpirationDate} =
+        await JSON.parse(authData);
+      if (
+        new Date(accessTokenExpirationDate) <= new Date() ||
+        !accessToken ||
+        !refreshToken
+      ) {
+        dispatch(requestRefreshedAccessToken(refreshToken));
+        return;
+      }
+      dispatch(setRefreshToken({accessToken, refreshToken}));
+    };
+    tryLogin();
+  }, [dispatch]);
+
   return (
     <>
       <StatusBar
@@ -35,12 +46,12 @@ const App = () => {
       />
       <NavigationContainer>
         <Stack.Navigator
-          // initialRouteName="Home"
+          initialRouteName="Home"
           screenOptions={() => ({
             headerShown: false,
             tabBarShowLabel: false,
           })}>
-          {auth ? (
+          {auth (
             <Stack.Group>
               <Stack.Screen name="HomeTabs" component={HomeTabs} />
               <Stack.Screen name="TrackPlayer" component={TrackPlayer} />
@@ -48,7 +59,6 @@ const App = () => {
           ) : (
             <Stack.Group>
               <Stack.Screen name="Authorize" component={Authorize} />
-              <Stack.Screen name="HomeTabs" component={HomeTabs} />
             </Stack.Group>
           )}
         </Stack.Navigator>

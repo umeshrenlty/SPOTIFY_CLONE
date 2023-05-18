@@ -1,14 +1,16 @@
-import {set_Token} from '../constant';
+import {set_Refresh_Token, set_Token} from '../constant';
 
-const reducer = (state = {token: ''}, action) => {
-  console.log(action.type, state, 455);
-
+const tokenReducer = (state = {tokenDetails: null}, action) => {
   switch (action.type) {
     case set_Token:
-      console.log(11);
       return {
-        ...state,
-        token: action.token,
+        ...state.tokenDetails,
+        auth: action.auth,
+      };
+    case set_Refresh_Token:
+      return {
+        ...state.tokenDetails,
+        data: action.data,
       };
 
     default:
@@ -16,4 +18,4 @@ const reducer = (state = {token: ''}, action) => {
   }
 };
 
-export default reducer;
+export default tokenReducer;

@@ -1,9 +1,9 @@
-import {access_Token} from './constant';
+import {request_Refreshed_AccessToken, set_Refresh_Token} from './constant';
 import {authenticate_User, set_Token} from './constant';
 
-export const accessToken = () => {
+export const requestRefreshedAccessToken = () => {
   return {
-    type: access_Token,
+    type: request_Refreshed_AccessToken,
   };
 };
 export const authenticateUser = () => {
@@ -11,9 +11,15 @@ export const authenticateUser = () => {
     type: authenticate_User,
   };
 };
-export const setToken = data => {
+export const setToken = auth => {
   return {
     type: set_Token,
+    auth,
+  };
+};
+export const setRefreshToken = data => {
+  return {
+    type: set_Refresh_Token,
     data,
   };
 };

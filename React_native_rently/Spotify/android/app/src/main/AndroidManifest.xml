@@ -24,7 +24,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="demospotify" android:host="app" />
+                <data android:scheme="com.demospotify.auth" android:host="oauth2callback"/>
             </intent-filter>
       </activity>
     </application>
