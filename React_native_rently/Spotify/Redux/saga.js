@@ -1,10 +1,12 @@
-import {takeEvery, put, takeLatest, delay} from 'redux-saga/effects';
+import {takeEvery, put, takeLatest, all} from 'redux-saga/effects';
 import {spotifyAuthConfig} from '../utils/spotifyAuthConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {authorize, refresh} from 'react-native-app-auth';
-import {authenticate_User} from './constant';
+import {authenticate_User, get_User_Playlists} from './constant';
 import {request_Refreshed_AccessToken} from './constant';
 import {set_Token} from './constant';
+
+import axios from 'axios';
 const saveTokensToAsyncStorage = (
   accessToken,
   refreshToken,
@@ -20,11 +22,9 @@ const saveTokensToAsyncStorage = (
   );
 };
 function* getToken() {
-  console.log(11);
-
   const auth = yield authorize(spotifyAuthConfig);
   const {accessToken, refreshToken, accessTokenExpirationDate} = auth;
-  console.log(accessToken, 'start');
+
   saveTokensToAsyncStorage(
     accessToken,
     refreshToken,
@@ -33,7 +33,6 @@ function* getToken() {
 }
 
 function* requestRefreshedAccessToken(refreshTokenFromStorage) {
-  console.log('hello');
   const auth = yield refresh(spotifyAuthConfig, {
     refreshToken: refreshTokenFromStorage,
   });
@@ -44,7 +43,25 @@ function* requestRefreshedAccessToken(refreshTokenFromStorage) {
     refreshToken,
     accessTokenExpirationDate,
   );
-  yield put({type: set_Token, auth});
+}
+function* getUser(value) {
+  console.log('hello');
+  const authData = yield AsyncStorage.getItem('authData');
+  const {accessToken} = yield JSON.parse(authData);
+  yield axios('https://api.spotify.com/v1/playlists/3cEYpjA9oz9GiPac4AsH4n', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    },
+  })
+    .then(response => {
+      console.log(response);
+    })
+    .catch(error => {
+      console.log('error', error.message);
+    });
 }
 
 function* getTokenSaga() {
@@ -52,6 +69,7 @@ function* getTokenSaga() {
   try {
     yield takeLatest(authenticate_User, getToken);
     yield takeEvery(request_Refreshed_AccessToken, requestRefreshedAccessToken);
+    yield takeEvery(get_User_Playlists, getUser);
   } catch (error) {
     console.error(error);
   }

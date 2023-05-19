@@ -28,10 +28,13 @@ const App = () => {
         !accessToken ||
         !refreshToken
       ) {
+        console.log(1);
         dispatch(requestRefreshedAccessToken(refreshToken));
+        console.log(2);
         return;
       }
       dispatch(setRefreshToken({accessToken, refreshToken}));
+      console.log(3);
     };
     tryLogin();
   }, [dispatch]);
@@ -51,15 +54,13 @@ const App = () => {
             headerShown: false,
             tabBarShowLabel: false,
           })}>
-          {auth (
+          {auth.accessToken ? (
             <Stack.Group>
               <Stack.Screen name="HomeTabs" component={HomeTabs} />
               <Stack.Screen name="TrackPlayer" component={TrackPlayer} />
             </Stack.Group>
           ) : (
-            <Stack.Group>
-              <Stack.Screen name="Authorize" component={Authorize} />
-            </Stack.Group>
+            <Stack.Screen name="Authorize" component={Authorize} />
           )}
         </Stack.Navigator>
       </NavigationContainer>

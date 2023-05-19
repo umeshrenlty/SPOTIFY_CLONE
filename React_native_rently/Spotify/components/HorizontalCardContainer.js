@@ -4,13 +4,16 @@ import React from 'react';
 
 const HorizontalCardContainer = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text>HorizontalCardContainer</Text>
-      <FlatList />
     </View>
   );
 };
 
 export default HorizontalCardContainer;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 5,
+  },
+});

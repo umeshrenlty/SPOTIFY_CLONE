@@ -1,6 +1,6 @@
 import {set_Refresh_Token, set_Token} from '../constant';
-
-const tokenReducer = (state = {tokenDetails: null}, action) => {
+const initialState = {tokenDetails: null};
+const tokenReducer = (state = initialState, action) => {
   switch (action.type) {
     case set_Token:
       return {
@@ -10,7 +10,7 @@ const tokenReducer = (state = {tokenDetails: null}, action) => {
     case set_Refresh_Token:
       return {
         ...state.tokenDetails,
-        data: action.data,
+        ...action.data,
       };
 
     default:

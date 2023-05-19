@@ -1,9 +1,15 @@
 import {StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SIZES} from '../constants';
 
 import Header from '../components/Header';
+import {useDispatch} from 'react-redux';
+import {getUserPlaylists} from '../Redux/action';
 const Home = ({navigation}) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUserPlaylists('15'));
+  });
   return (
     <View style={styles.container}>
       <Header />
