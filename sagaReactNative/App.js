@@ -17,7 +17,7 @@ import {NavigationContainer} from '@react-navigation/native';
 const Stack = createNativeStackNavigator();
 import {useSelector} from 'react-redux';
 import CartScreen from './src/screens/cartScreen';
-
+import ProductDetails from './src/screens/ProductDetails';
 const App = () => {
   const disaptch = useDispatch();
   const result = useSelector(state => state.cartData);
@@ -41,6 +41,23 @@ const App = () => {
           }}
         />
         <Stack.Screen name="cartScreen" component={CartScreen} />
+        <Stack.Screen
+          name="ProductDetails"
+          component={ProductDetails}
+          options={{
+            headerTitleAlign: 'center',
+            title: 'Detail',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              color: '#0f1012',
+              textAlign: 'center',
+            },
+            headerStyle: {
+              backgroundColor: '#fff',
+              textAlign: 'center',
+            },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

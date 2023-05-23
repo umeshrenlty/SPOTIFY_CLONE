@@ -7,16 +7,25 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Dimensions,
 } from 'react-native';
+const {width, height} = Dimensions.get('window');
+
 import {useNavigation} from '@react-navigation/native';
 // create a component
+import LottieView from 'lottie-react-native';
 const MyComponent = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={require('../assets/login.png')} />
+      <LottieView
+        source={require('../assets/wel.json')}
+        autoPlay
+        style={{height: 250, width: 200}}
+      />
+      {/* <Image style={styles.image} source={require('../assets/login.png')} /> */}
 
       <View style={styles.inputView}>
         <TextInput
@@ -61,6 +70,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+    width: width,
+    height: height,
   },
   image: {
     width: 120,
@@ -69,10 +80,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   inputView: {
-    borderRadius: 50,
+    borderRadius: 40,
     width: '70%',
     backgroundColor: '#ffc0cb',
-    height: 70,
+    height: 50,
     marginBottom: 20,
     alignItems: 'center',
   },

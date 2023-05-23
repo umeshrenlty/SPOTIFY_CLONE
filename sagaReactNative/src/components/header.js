@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {productSearch} from '../redux/productActions';
 import {useDispatch} from 'react-redux';
 import {ADD_TO_CART} from '../redux/constant';
@@ -20,13 +20,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import RenderList from './renderList';
 
 const Header = () => {
-  const product = {
-    id: 1,
-    name: 'umesh',
-  };
   const stat = useSelector(state => state);
   const state = stat.productData;
-  console.log(stat, 12);
+  console.log(state, 'redux-data');
+  const {data, setData} = useState('ff');
 
   const disaptch = useDispatch();
   useEffect(() => {
@@ -34,33 +31,45 @@ const Header = () => {
   }, []);
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity onPress={() => disaptch(productList())}>
-        <Text style={styles.ProductList}>GET PRODUCT LIST</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => disaptch(addToCart())}>
-        <Text style={styles.RemoveCart}>ADD TO CART</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => disaptch(RemoveFromCart())}>
-        <Text style={styles.}>REMOVE FROM CART</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => disaptch(EmptyCart())}>
-        <Text style={styles.EmptyCart}>EMPTY CART</Text>
-      </TouchableOpacity> */}
-      <View>
+      <View style={styles.box}>
         <View style={styles.search}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="search item..."
-            onChangeText={event => disaptch(productSearch(event))}
-          />
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={require('../../assets/search.png')}
+              style={{width: 18, height: 18, marginLeft: 18}}
+            />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="search item..."
+              value={data}
+              onChangeText={event => disaptch(productSearch(event))}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              setData('');
+            }}>
+            <Image
+              source={require('../../assets/cancel.png')}
+              style={{width: 18, height: 18, marginRight: 18}}
+            />
+          </TouchableOpacity>
         </View>
-        <FlatList
-          numColumns={2}
-          data={state}
-          renderItem={dat => <RenderList item={dat} />}
-          keyExtractor={item => item.id}
-        />
+        <View style={styles.filter}>
+          <TouchableOpacity>
+            <Image
+              source={require('../../assets/filter.png')}
+              style={{width: 18, height: 18, marginRight: 18}}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
+      <FlatList
+        numColumns={2}
+        data={state}
+        renderItem={dat => <RenderList item={dat} />}
+        keyExtractor={item => item.id}
+      />
     </View>
   );
 };
@@ -70,15 +79,24 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignSelf: 'center',
+    // justifyContent: 'center',
+    // alignSelf: 'center',
+  },
+  box: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    height: 90,
+    marginTop: 15,
+    justifyContent: 'space-between',
   },
   search: {
     borderRadius: 100,
     margin: 18,
-    width: 320,
+    width: '80%',
     backgroundColor: '#fff',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   addCart: {
@@ -90,6 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: 14,
+    marginLeft: 15,
   },
   RemoveCart: {
     margin: 15,

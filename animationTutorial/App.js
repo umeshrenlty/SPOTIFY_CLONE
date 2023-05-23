@@ -1,10 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-
+import One from './src/tut01';
+import Two from './src/HandlingGestures';
 const App = () => {
   return (
     <View>
-      <Text>App</Text>
+      <Two />
     </View>
   );
 };

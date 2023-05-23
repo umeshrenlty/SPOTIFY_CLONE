@@ -3,15 +3,29 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import {addToCart, removeToCart} from '../redux/action';
 import {REMOVE_FROM_CART} from '../redux/constant';
+import {useNavigation} from '@react-navigation/native';
 
 const RenderList = data => {
+  const navigation = useNavigation();
   const {id, title, price, description, category, image, ratting} =
     data.item.item;
   const dispatch = useDispatch();
   return (
     <View style={styles.container}>
       <View style={styles.data}>
-        <TouchableOpacity style={styles.onclick}>
+        <TouchableOpacity
+          style={styles.onclick}
+          onPress={() => {
+            navigation.navigate('ProductDetails', {
+              id,
+              title,
+              price,
+              description,
+              category,
+              image,
+              ratting,
+            });
+          }}>
           <View style={styles.box}>
             <View style={styles.imgBox}>
               <Image
