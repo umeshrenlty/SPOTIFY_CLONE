@@ -2,11 +2,23 @@ import {takeEvery, put, takeLatest, all} from 'redux-saga/effects';
 import {spotifyAuthConfig} from '../utils/spotifyAuthConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {authorize, refresh} from 'react-native-app-auth';
-import {authenticate_User, get_User_Playlists} from './constant';
+import {getUserRecentlyPlaylists, setUserPlaylists} from './actions/action';
+import {
+  authenticate_User,
+  get_User_Playlists,
+  get_User_Profile,
+  get_User_Recently_Playlists,
+  get_playList_media,
+  set_Media_Play_list,
+  set_User_Info,
+  set_User_Playlists,
+  set_User_Recently_Playlists,
+} from './constant';
 import {request_Refreshed_AccessToken} from './constant';
 import {set_Token} from './constant';
 
 import axios from 'axios';
+
 const saveTokensToAsyncStorage = (
   accessToken,
   refreshToken,
@@ -33,22 +45,26 @@ function* getToken() {
 }
 
 function* requestRefreshedAccessToken(refreshTokenFromStorage) {
-  const auth = yield refresh(spotifyAuthConfig, {
-    refreshToken: refreshTokenFromStorage,
-  });
-  const {accessToken, refreshToken, accessTokenExpirationDate} = auth;
-  console.log(accessToken, 'refreshOe');
-  saveTokensToAsyncStorage(
-    accessToken,
-    refreshToken,
-    accessTokenExpirationDate,
-  );
+  try {
+    const auth = yield refresh(spotifyAuthConfig, {
+      refreshToken: refreshTokenFromStorage,
+    });
+    const {accessToken, refreshToken, accessTokenExpirationDate} = auth;
+    console.log(accessToken, 'refreshOe');
+    saveTokensToAsyncStorage(
+      accessToken,
+      refreshToken,
+      accessTokenExpirationDate,
+    );
+  } catch (error) {
+    console.log(error);
+  }
 }
-function* getUser(value) {
+function* getUserPlay() {
   console.log('hello');
   const authData = yield AsyncStorage.getItem('authData');
   const {accessToken} = yield JSON.parse(authData);
-  yield axios('https://api.spotify.com/v1/playlists/3cEYpjA9oz9GiPac4AsH4n', {
+  const data = yield axios('https://api.spotify.com/v1/me/playlists?limit=20', {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -56,12 +72,95 @@ function* getUser(value) {
       Authorization: 'Bearer ' + accessToken,
     },
   })
-    .then(response => {
-      console.log(response);
+    .then(playlist => {
+      // console.log(playlist, 'checi');
+      return playlist;
     })
     .catch(error => {
-      console.log('error', error.message);
+      return error;
     });
+  const {items} = data?.data;
+
+  console.log(items, 'check');
+  yield put({type: set_User_Playlists, items});
+}
+// function* getUserInfo()
+// {
+
+// }
+function* getUserData() {
+  const authData = yield AsyncStorage.getItem('authData');
+  const {accessToken} = yield JSON.parse(authData);
+  const UserProfile = yield axios('https://api.spotify.com/v1/me', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    },
+  })
+    .then(userData => {
+      // console.log(userData, 'userData');
+      return userData;
+    })
+    .catch(error => {
+      return error;
+    });
+  const {data} = UserProfile;
+  const UserProfileInfo = data;
+
+  console.log(data, 'userProfile');
+  yield put({type: set_User_Info, UserProfileInfo});
+}
+function* RecentlyPlaylists() {
+  const authData = yield AsyncStorage.getItem('authData');
+  const {accessToken} = yield JSON.parse(authData);
+  const RecentlyPlayed = yield axios(
+    'https://api.spotify.com/v1/me/player/recently-played?limit=10',
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
+      },
+    },
+  )
+    .then(recentlyData => {
+      // console.log(recentlyData, 'recentlyData');
+      return recentlyData;
+    })
+    .catch(error => {
+      return error;
+    });
+  const {data} = RecentlyPlayed;
+
+  console.log(data, 'userProfile');
+  yield put({type: set_User_Recently_Playlists, data});
+}
+function* getMediaData({mediaId}) {
+  console.log(mediaId);
+  const abc = mediaId;
+  const authData = yield AsyncStorage.getItem('authData');
+  const {accessToken} = yield JSON.parse(authData);
+  const mediaData = yield axios(`https://api.spotify.com/v1/playlists/${abc}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    },
+  })
+    .then(recentlyData => {
+      console.log(recentlyData, '552555555555');
+      return recentlyData;
+    })
+    .catch(error => {
+      return error;
+    });
+  const media = mediaData.data;
+
+  yield put({type: set_Media_Play_list, media});
 }
 
 function* getTokenSaga() {
@@ -69,7 +168,10 @@ function* getTokenSaga() {
   try {
     yield takeLatest(authenticate_User, getToken);
     yield takeEvery(request_Refreshed_AccessToken, requestRefreshedAccessToken);
-    yield takeEvery(get_User_Playlists, getUser);
+    yield takeEvery(get_User_Playlists, getUserPlay);
+    yield takeEvery(get_User_Profile, getUserData);
+    yield takeEvery(get_User_Recently_Playlists, RecentlyPlaylists);
+    yield takeEvery(get_playList_media, getMediaData);
   } catch (error) {
     console.error(error);
   }

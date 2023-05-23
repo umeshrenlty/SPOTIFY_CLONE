@@ -1,7 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {requestRefreshedAccessToken, setRefreshToken} from './Redux/action';
+import {
+  requestRefreshedAccessToken,
+  setRefreshToken,
+} from './Redux/actions/action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
@@ -13,31 +16,33 @@ const Stack = createStackNavigator();
 const App = () => {
   const auth = useSelector(state => state.TokenReducer);
   console.log(auth, 'auth');
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const tryLogin = async () => {
+    const authData = await AsyncStorage.getItem('authData');
+    if (!authData) {
+      return;
+    }
+    const {accessToken, refreshToken, accessTokenExpirationDate} =
+      await JSON.parse(authData);
+    if (
+      new Date(accessTokenExpirationDate) <= new Date() ||
+      !accessToken ||
+      !refreshToken
+    ) {
+      console.log(1);
+      // dispatch(requestRefreshedAccessToken(refreshToken));
+      console.log(2);
+      return;
+    }
+    dispatch(
+      setRefreshToken({accessToken, refreshToken, accessTokenExpirationDate}),
+    );
+    console.log(3);
+  };
   useEffect(() => {
-    const tryLogin = async () => {
-      const authData = await AsyncStorage.getItem('authData');
-      if (!authData) {
-        return;
-      }
-      const {accessToken, refreshToken, accessTokenExpirationDate} =
-        await JSON.parse(authData);
-      if (
-        new Date(accessTokenExpirationDate) <= new Date() ||
-        !accessToken ||
-        !refreshToken
-      ) {
-        console.log(1);
-        dispatch(requestRefreshedAccessToken(refreshToken));
-        console.log(2);
-        return;
-      }
-      dispatch(setRefreshToken({accessToken, refreshToken}));
-      console.log(3);
-    };
     tryLogin();
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
@@ -54,7 +59,7 @@ const App = () => {
             headerShown: false,
             tabBarShowLabel: false,
           })}>
-          {auth.accessToken ? (
+          {auth?.accessToken ? (
             <Stack.Group>
               <Stack.Screen name="HomeTabs" component={HomeTabs} />
               <Stack.Screen name="TrackPlayer" component={TrackPlayer} />

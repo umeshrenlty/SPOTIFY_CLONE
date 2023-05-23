@@ -1,4 +1,4 @@
-import {set_Refresh_Token, set_Token} from '../constant';
+import {set_Refresh_Token, set_Token, set_User_Info} from '../constant';
 const initialState = {tokenDetails: null};
 const tokenReducer = (state = initialState, action) => {
   switch (action.type) {

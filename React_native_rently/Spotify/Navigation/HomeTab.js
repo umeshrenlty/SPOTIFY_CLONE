@@ -9,6 +9,9 @@ import Media from '../screens/Media';
 import Library from '../screens/Library';
 import Authorize from '../screens/Authorize';
 import Profile from '../screens/Profile';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -48,11 +51,14 @@ const SearchStack = () => {
 
 const HomeTabs = () => {
   return (
-    <View style={{flex: 1, width: '100%'}}>
+    <View style={{flex: 1, width: '100%', backgroundColor: '#fff'}}>
       <Tab.Navigator
         screenOptions={({route}) => ({
           headerShown: false,
           tabBarShowLabel: false,
+
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'gray',
           tabBarStyle: {
             position: 'absolute',
             marginBottom: 10,
@@ -69,13 +75,69 @@ const HomeTabs = () => {
             },
             shadowOpacity: 0.29,
             shadowRadius: 4.65,
-            elevation: 7,
+            elevation: 9,
           },
         })}>
-        <Tab.Screen name="HomeStack" component={HomeStack} />
-        <Tab.Screen name="SearchStack" component={SearchStack} />
-        <Tab.Screen name="LibraryStack" component={LibraryStack} />
-        <Tab.Screen name="ProfileStack" component={ProfileStack} />
+        <Tab.Screen
+          name="HomeStack"
+          component={HomeStack}
+          options={{
+            tabBarIcon: tabBarInfo => {
+              return (
+                <AntDesign
+                  name="home"
+                  size={35}
+                  color={tabBarInfo.focused ? '#006600' : '#8e8e93'}
+                />
+              );
+            },
+          }}
+        />
+        <Tab.Screen
+          name="SearchStack"
+          component={SearchStack}
+          options={{
+            tabBarIcon: tabBarInfo => {
+              return (
+                <AntDesign
+                  name="search1"
+                  size={35}
+                  color={tabBarInfo.focused ? '#006600' : '#8e8e93'}
+                />
+              );
+            },
+          }}
+        />
+        <Tab.Screen
+          name="LibraryStack"
+          component={LibraryStack}
+          options={{
+            tabBarIcon: tabBarInfo => {
+              return (
+                <Ionicons
+                  name="library"
+                  size={35}
+                  color={tabBarInfo.focused ? '#006600' : '#8e8e93'}
+                />
+              );
+            },
+          }}
+        />
+        <Tab.Screen
+          name="ProfileStack"
+          component={ProfileStack}
+          options={{
+            tabBarIcon: tabBarInfo => {
+              return (
+                <AntDesign
+                  name="profile"
+                  size={35}
+                  color={tabBarInfo.focused ? '#006600' : '#8e8e93'}
+                />
+              );
+            },
+          }}
+        />
       </Tab.Navigator>
     </View>
   );

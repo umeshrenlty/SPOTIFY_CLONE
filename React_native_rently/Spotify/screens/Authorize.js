@@ -4,7 +4,7 @@ import TextButton from '../components/TextButton';
 
 import {COLORS} from '../constants';
 import {useDispatch} from 'react-redux';
-import {authenticateUser} from '../Redux/action';
+import {authenticateUser} from '../Redux/actions/action';
 const Authorize = () => {
   const dispatch = useDispatch();
   return (

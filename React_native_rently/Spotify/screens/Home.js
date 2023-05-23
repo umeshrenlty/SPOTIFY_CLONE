@@ -1,18 +1,39 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import React, {useEffect} from 'react';
 import {SIZES} from '../constants';
 
 import Header from '../components/Header';
-import {useDispatch} from 'react-redux';
-import {getUserPlaylists} from '../Redux/action';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getUserPlaylists,
+  getUserProfile,
+  getUserRecentlyPlaylists,
+} from '../Redux/actions/action';
+import HorizontalCardContainer from '../components/HorizontalCardContainer';
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
+  const user = useSelector(state => state.setUserData);
+  console.log(user, 1100);
+  const userInfo = user.userProfileData;
   useEffect(() => {
-    dispatch(getUserPlaylists('15'));
-  });
+    dispatch(getUserPlaylists());
+    dispatch(getUserProfile());
+    dispatch(getUserRecentlyPlaylists());
+  }, []);
+
   return (
     <View style={styles.container}>
       <Header />
+      <HorizontalCardContainer
+        label="MY PLAYLISTS"
+        cardItemImageStyle={{opacity: 0.6}}
+        cardItemTextStyle={styles.playlistTextStyle}
+        data={user.userPlayLists}
+      />
+      <HorizontalCardContainer
+        label="RECENTLY PLAYED"
+        data={user.userRecentlyPlayed}
+      />
     </View>
   );
 };
@@ -22,7 +43,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: SIZES.paddingTop,
-    backgroundColor: 'black',
+    backgroundColor: '#464d47',
     width: '100%',
   },
 });
