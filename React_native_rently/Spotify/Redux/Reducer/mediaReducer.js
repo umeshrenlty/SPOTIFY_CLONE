@@ -1,4 +1,4 @@
-const {set_Media_Play_list} = require('../constant');
+const {set_Media_Play_list, set_Album_Play_list} = require('../constant');
 
 const initialState = {
   isLoading: true,
@@ -21,10 +21,11 @@ const initialState = {
     ],
   },
 };
-const mediaData = (state = initialState, {type, media}) => {
-  console.log(media);
+const mediaData = (state = initialState, action) => {
+  const media = action.media;
+  // console.log(action.media);
   const playlistTracks = () => {};
-  switch (type) {
+  switch (action.type) {
     case set_Media_Play_list: {
       return {
         ...state,
@@ -32,10 +33,26 @@ const mediaData = (state = initialState, {type, media}) => {
         description: media.description,
         name: media.name,
         type: media.type,
+        images: media.images,
         followers: media.followers,
         tracks: media.tracks.items.map(track => {
           return {...track, ...track.track};
         }),
+      };
+    }
+    case set_Album_Play_list: {
+      // console.log(action.media, 2344);
+      const media = action.media;
+      const filteredTracks = media.tracks.items.filter(
+        track => track.preview_url !== null,
+      );
+      return {
+        ...state,
+        isLoading: false,
+        description: media.description,
+        name: media.name,
+        type: media.type,
+        images: media.images,
       };
     }
     default:

@@ -11,6 +11,7 @@ const initialState = {
   userMediaData: [],
 };
 const setUserData = (state = initialState, action) => {
+  // console.log(action.items, 'umes');
   switch (action.type) {
     case set_User_Playlists:
       return {

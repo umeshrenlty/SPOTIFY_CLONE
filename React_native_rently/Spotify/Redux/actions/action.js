@@ -4,7 +4,6 @@ import {
   set_Refresh_Token,
   get_Featured_Playlists,
   get_User_Recently_Playlists,
-  get_Category_Playlists,
   get_User_Top_Artists,
   set_User_Playlists,
   set_User_Info,

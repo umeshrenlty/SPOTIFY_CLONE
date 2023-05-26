@@ -10,15 +10,17 @@ import {
   getUserRecentlyPlaylists,
 } from '../Redux/actions/action';
 import HorizontalCardContainer from '../components/HorizontalCardContainer';
+import getCategory from '../Redux/actions/BrowseActions';
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.setUserData);
   console.log(user, 1100);
-  const userInfo = user.userProfileData;
+
   useEffect(() => {
     dispatch(getUserPlaylists());
     dispatch(getUserProfile());
     dispatch(getUserRecentlyPlaylists());
+    dispatch(getCategory());
   }, []);
 
   return (

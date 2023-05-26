@@ -1,5 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {StatusBar} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   requestRefreshedAccessToken,
@@ -15,8 +20,7 @@ import HomeTabs from './Navigation/HomeTab';
 const Stack = createStackNavigator();
 const App = () => {
   const auth = useSelector(state => state.TokenReducer);
-  console.log(auth, 'auth');
-
+  console.log(auth, 'authDetails');
   const dispatch = useDispatch();
   const tryLogin = async () => {
     const authData = await AsyncStorage.getItem('authData');
@@ -25,25 +29,31 @@ const App = () => {
     }
     const {accessToken, refreshToken, accessTokenExpirationDate} =
       await JSON.parse(authData);
+    console.log(accessTokenExpirationDate);
+    console.log(new Date());
     if (
       new Date(accessTokenExpirationDate) <= new Date() ||
       !accessToken ||
       !refreshToken
     ) {
-      console.log(1);
       // dispatch(requestRefreshedAccessToken(refreshToken));
-      console.log(2);
       return;
     }
     dispatch(
       setRefreshToken({accessToken, refreshToken, accessTokenExpirationDate}),
     );
-    console.log(3);
   };
   useEffect(() => {
     tryLogin();
   }, []);
 
+  // if (auth?.isLoading) {
+  //   return (
+  //     <SafeAreaView style={styles.container}>
+  //       <ActivityIndicator size="large" color="#bbb" />
+  //     </SafeAreaView>
+  //   );
+  // }
   return (
     <>
       <StatusBar
@@ -74,3 +84,11 @@ const App = () => {
 };
 
 export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#112',
+  },
+});

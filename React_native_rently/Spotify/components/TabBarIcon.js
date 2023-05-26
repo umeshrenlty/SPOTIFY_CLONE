@@ -13,7 +13,7 @@ import ProfileSelectedSvg from '../assets/icons/ic_profile_selected.svg';
 import {COLORS, FONTS} from '../constants';
 
 const TabBarIcon = ({isFocused, name}) => {
-    console.log(isFocusedzzzzzzzzzzzz)
+  console.log(isFocusedzzzzzzzzzzzz);
   const animation = new Animated.Value(0);
   const inputRange = [0, 1];
   const outputRange = [0.9, 0.7];

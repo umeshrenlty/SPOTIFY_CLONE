@@ -12,6 +12,10 @@ import Profile from '../screens/Profile';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import TrackPlay from '../screens/TrackPlayer';
+import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -37,6 +41,7 @@ const HomeStack = () => {
     <Stack.Navigator screenOptions={() => ({headerShown: false})}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Media" component={Media} />
+      {/* <Stack.Screen name="TrackPlay" component={TrackPlay} /> */}
     </Stack.Navigator>
   );
 };
@@ -49,7 +54,8 @@ const SearchStack = () => {
   );
 };
 
-const HomeTabs = () => {
+const HomeTabs = ({navigation}) => {
+  console.log(navigation, 'home');
   return (
     <View style={{flex: 1, width: '100%', backgroundColor: '#fff'}}>
       <Tab.Navigator
@@ -84,7 +90,7 @@ const HomeTabs = () => {
           options={{
             tabBarIcon: tabBarInfo => {
               return (
-                <AntDesign
+                <Entypo
                   name="home"
                   size={35}
                   color={tabBarInfo.focused ? '#006600' : '#8e8e93'}
@@ -129,8 +135,8 @@ const HomeTabs = () => {
           options={{
             tabBarIcon: tabBarInfo => {
               return (
-                <AntDesign
-                  name="profile"
+                <FontAwesome5
+                  name="spotify"
                   size={35}
                   color={tabBarInfo.focused ? '#006600' : '#8e8e93'}
                 />
